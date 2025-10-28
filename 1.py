@@ -34,6 +34,7 @@ class Manager(Employee):
     Дополнительный атрибут:
         bonus (float): Бонус менеджера
     """
+    
     def __init__(self, name, salary, bonus):
         """
         Конструктор класса Manager.
@@ -57,10 +58,35 @@ class Manager(Employee):
         return self.salary + self.bonus
     
 class Developer(Employee):
+    """
+    Класс разработчика, наследуется от Employee.
+    
+    Дополнительные атрибуты:
+        overtime_hours (float): Количество сверхурочных часов
+        hourly_rate (float): Ставка за сверхурочный час
+    """
+
     def __init__(self, name, salary, overtime_hours, hourly_rate):
+        """
+        Конструктор класса Developer.
+        
+        Args:
+            name (str): Имя разработчика
+            salary (float): Базовая зарплата
+            overtime_hours (float): Сверхурочные часы
+            hourly_rate (float): Ставка за час сверхурочной работы
+        """
+        # Вызов конструктора родительского класса
         super().__init__(name, salary)
         self.overtime_hours = overtime_hours
         self.hourly_rate = hourly_rate
-    
+
     def calculate_salary(self):
+        """
+        Расчет зарплаты разработчика с учетом сверхурочных.
+        
+        Returns:
+            float: Общая зарплата (базовая + оплата сверхурочных)
+        """
+        # Общая зарплата = базовая + сверхурочные
         return self.salary + (self.overtime_hours * self.hourly_rate)
