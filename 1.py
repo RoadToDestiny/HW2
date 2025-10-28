@@ -90,3 +90,10 @@ class Developer(Employee):
         """
         # Общая зарплата = базовая + сверхурочные
         return self.salary + (self.overtime_hours * self.hourly_rate)
+    
+# Пример использования
+manager = Manager("Иван Иванов", 50000, 15000)
+developer = Developer("Петр Петров", 40000, 10, 500)
+
+print(f"Зарплата менеджера: {manager.calculate_salary()} руб.")
+print(f"Зарплата разработчика: {developer.calculate_salary()} руб.")
