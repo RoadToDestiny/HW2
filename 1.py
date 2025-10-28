@@ -6,6 +6,7 @@ class Employee:
         name (str): Имя сотрудника
         salary (float): Базовая зарплата сотрудника
     """
+    
     def __init__(self, name, salary):
         """
         Конструктор базового класса Employee.
@@ -16,4 +17,12 @@ class Employee:
         """       
         self.name = name
         self.salary = salary
+
+    def calculate_salary(self):
+        """
+        Расчет зарплаты сотрудника.
         
+        Returns:
+            float: Базовая зарплата сотрудника
+        """
+        return self.salary
