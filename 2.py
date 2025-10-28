@@ -65,3 +65,9 @@ class Car(Vehicle):
                 str: Строка с описанием мотоцикла
             """
             return "Это мотоцикл - двухколесное транспортное средство с двигателем"
+        
+# Демонстрация работы метода для каждого транспортного средства
+vehicles = [Vehicle(), Car(), Bicycle(), Motorcycle()]
+
+for vehicle in vehicles:
+    print(vehicle.get_description())
