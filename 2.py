@@ -48,3 +48,7 @@ class Car(Vehicle):
             str: Строка с описанием велосипеда
             """
             return "Это велосипед - транспортное средство с педалями"
+        
+    class Motorcycle(Vehicle):
+        def get_description(self):
+            return "Это мотоцикл - двухколесное транспортное средство с двигателем"
