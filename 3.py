@@ -128,3 +128,80 @@ class ShoppingCart:
         for item in self.items.values():
             total += item['product'].price * item['quantity']
         return total
+
+class Order:
+    """
+    Класс для представления заказа в онлайн-магазине.
+    
+    Attributes:
+        order_id (int): Уникальный идентификатор заказа
+        customer (Customer): Покупатель, сделавший заказ
+        items (dict): Товары в заказе
+        total_price (float): Итоговая стоимость заказа
+        tax_rate (float): Ставка налога
+        discount (float): Размер скидки (в долях от 1)
+    """
+    
+    def __init__(self, order_id, customer, cart):
+        """
+        Инициализирует объект заказа.
+        
+        Args:
+            order_id (int): Уникальный идентификатор заказа
+            customer (Customer): Покупатель, сделавший заказ
+            cart (ShoppingCart): Корзина с товарами для заказа
+        """
+        self.order_id = order_id
+        self.customer = customer
+        self.items = cart.items.copy()
+        self.total_price = 0
+        self.tax_rate = 0.1
+        self.discount = 0
+
+    def calculate_total(self):
+        """
+        Рассчитывает итоговую стоимость заказа с учетом скидок и налогов.
+        
+        Returns:
+            float: Итоговая стоимость заказа
+        """
+        subtotal = 0
+        for item in self.items.values():
+            subtotal += item['product'].price * item['quantity']
+        
+        discount_amount = subtotal * self.discount
+        taxed_amount = (subtotal - discount_amount) * self.tax_rate
+        self.total_price = subtotal - discount_amount + taxed_amount
+        return self.total_price
+
+    def set_discount(self, discount_percent):
+        """
+        Устанавливает скидку на заказ.
+        
+        Args:
+            discount_percent (float): Процент скидки (от 0 до 100)
+        """
+        self.discount = discount_percent / 100
+
+    def process_order(self):
+        """
+        Обрабатывает заказ: проверяет наличие товаров, обновляет склад,
+        рассчитывает стоимость и добавляет заказ в историю покупателя.
+        
+        Returns:
+            bool: True если заказ успешно обработан
+        
+        Raises:
+            Exception: Если товара недостаточно на складе
+        """
+        for product_id, item in self.items.items():
+            product = item['product']
+            quantity = item['quantity']
+            if product.stock >= quantity:
+                product.stock -= quantity
+            else:
+                raise Exception(f"Недостаточно товара {product.name} на складе")
+        
+        self.calculate_total()
+        self.customer.add_order(self)
+        return True
