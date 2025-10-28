@@ -207,12 +207,16 @@ class Order:
         return True
 
 # Демонстрация работы
+
+# Создание товаров
 product1 = Product(1, "Ноутбук", 50000, 10, "Электроника")
 product2 = Product(2, "Мышь", 1500, 25, "Электроника")
 product3 = Product(3, "Книга", 500, 50, "Книги")
 
+# Создание покупателя
 customer = Customer(1, "Иван Иванов", "ivan@mail.ru")
 
+# Работа с корзиной
 cart = ShoppingCart()
 cart.add_product(product1)
 cart.add_product(product2, 2)
@@ -221,6 +225,7 @@ cart.add_product(product3)
 print(f"Товары в корзине: {len(cart.items)}")
 print(f"Общая стоимость корзины: {cart.get_total_price()} руб.")
 
+# Оформление заказа
 order = Order(1, customer, cart)
 order.set_discount(10)
 order.process_order()
