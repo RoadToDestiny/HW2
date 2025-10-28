@@ -205,3 +205,26 @@ class Order:
         self.calculate_total()
         self.customer.add_order(self)
         return True
+
+# Демонстрация работы
+product1 = Product(1, "Ноутбук", 50000, 10, "Электроника")
+product2 = Product(2, "Мышь", 1500, 25, "Электроника")
+product3 = Product(3, "Книга", 500, 50, "Книги")
+
+customer = Customer(1, "Иван Иванов", "ivan@mail.ru")
+
+cart = ShoppingCart()
+cart.add_product(product1)
+cart.add_product(product2, 2)
+cart.add_product(product3)
+
+print(f"Товары в корзине: {len(cart.items)}")
+print(f"Общая стоимость корзины: {cart.get_total_price()} руб.")
+
+order = Order(1, customer, cart)
+order.set_discount(10)
+order.process_order()
+
+print(f"Итоговая стоимость заказа: {order.total_price:.2f} руб.")
+print(f"История заказов клиента: {len(customer.order_history)} заказ(ов)")
+print(f"Остаток ноутбуков на складе: {product1.stock}")
