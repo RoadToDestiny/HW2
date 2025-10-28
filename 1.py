@@ -55,3 +55,12 @@ class Manager(Employee):
             float: Общая зарплата (базовая + бонус)
         """
         return self.salary + self.bonus
+    
+class Developer(Employee):
+    def __init__(self, name, salary, overtime_hours, hourly_rate):
+        super().__init__(name, salary)
+        self.overtime_hours = overtime_hours
+        self.hourly_rate = hourly_rate
+    
+    def calculate_salary(self):
+        return self.salary + (self.overtime_hours * self.hourly_rate)
