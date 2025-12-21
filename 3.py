@@ -1,7 +1,7 @@
 class Product:
     """
     Класс для представления товара в онлайн-магазине.
-    
+
     Attributes:
         product_id (int): Уникальный идентификатор товара
         name (str): Название товара
@@ -9,11 +9,11 @@ class Product:
         stock (int): Количество товара на складе
         category (str): Категория товара
     """
-    
+
     def __init__(self, product_id, name, price, stock, category):
         """
         Инициализирует объект товара.
-        
+
         Args:
             product_id (int): Уникальный идентификатор товара
             name (str): Название товара
@@ -27,21 +27,22 @@ class Product:
         self.stock = stock
         self.category = category
 
+
 class Customer:
     """
     Класс для представления покупателя в онлайн-магазине.
-    
+
     Attributes:
         customer_id (int): Уникальный идентификатор покупателя
         name (str): Имя покупателя
         email (str): Email покупателя
         order_history (list): История заказов покупателя
     """
-    
+
     def __init__(self, customer_id, name, email):
         """
         Инициализирует объект покупателя.
-        
+
         Args:
             customer_id (int): Уникальный идентификатор покупателя
             name (str): Имя покупателя
@@ -55,20 +56,21 @@ class Customer:
     def add_order(self, order):
         """
         Добавляет заказ в историю заказов покупателя.
-        
+
         Args:
             order (Order): Объект заказа для добавления
         """
         self.order_history.append(order)
 
+
 class ShoppingCart:
     """
     Класс для представления корзины покупок.
-    
+
     Attributes:
         items (dict): Словарь товаров в корзине
     """
-    
+
     def __init__(self):
         """Инициализирует пустую корзину покупок."""
         self.items = {}
@@ -76,7 +78,7 @@ class ShoppingCart:
     def add_product(self, product, quantity=1):
         """
         Добавляет товар в корзину.
-        
+
         Args:
             product (Product): Объект товара для добавления
             quantity (int, optional): Количество товара. По умолчанию 1
@@ -92,7 +94,7 @@ class ShoppingCart:
     def remove_product(self, product_id):
         """
         Удаляет товар из корзины.
-        
+
         Args:
             product_id (int): Идентификатор товара для удаления
         """
@@ -102,7 +104,7 @@ class ShoppingCart:
     def update_quantity(self, product_id, quantity):
         """
         Обновляет количество товара в корзине.
-        
+
         Args:
             product_id (int): Идентификатор товара
             quantity (int): Новое количество товара
@@ -120,7 +122,7 @@ class ShoppingCart:
     def get_total_price(self):
         """
         Рассчитывает общую стоимость товаров в корзине.
-        
+
         Returns:
             float: Общая стоимость товаров в корзине
         """
@@ -129,10 +131,11 @@ class ShoppingCart:
             total += item['product'].price * item['quantity']
         return total
 
+
 class Order:
     """
     Класс для представления заказа в онлайн-магазине.
-    
+
     Attributes:
         order_id (int): Уникальный идентификатор заказа
         customer (Customer): Покупатель, сделавший заказ
@@ -141,11 +144,11 @@ class Order:
         tax_rate (float): Ставка налога
         discount (float): Размер скидки (в долях от 1)
     """
-    
+
     def __init__(self, order_id, customer, cart):
         """
         Инициализирует объект заказа.
-        
+
         Args:
             order_id (int): Уникальный идентификатор заказа
             customer (Customer): Покупатель, сделавший заказ
@@ -161,14 +164,14 @@ class Order:
     def calculate_total(self):
         """
         Рассчитывает итоговую стоимость заказа с учетом скидок и налогов.
-        
+
         Returns:
             float: Итоговая стоимость заказа
         """
         subtotal = 0
         for item in self.items.values():
             subtotal += item['product'].price * item['quantity']
-        
+
         discount_amount = subtotal * self.discount
         taxed_amount = (subtotal - discount_amount) * self.tax_rate
         self.total_price = subtotal - discount_amount + taxed_amount
@@ -177,7 +180,7 @@ class Order:
     def set_discount(self, discount_percent):
         """
         Устанавливает скидку на заказ.
-        
+
         Args:
             discount_percent (float): Процент скидки (от 0 до 100)
         """
@@ -187,10 +190,10 @@ class Order:
         """
         Обрабатывает заказ: проверяет наличие товаров, обновляет склад,
         рассчитывает стоимость и добавляет заказ в историю покупателя.
-        
+
         Returns:
             bool: True если заказ успешно обработан
-        
+
         Raises:
             Exception: Если товара недостаточно на складе
         """
@@ -200,11 +203,14 @@ class Order:
             if product.stock >= quantity:
                 product.stock -= quantity
             else:
-                raise Exception(f"Недостаточно товара {product.name} на складе")
-        
+                raise Exception(
+                    f"Недостаточно товара {product.name} на складе"
+                )
+
         self.calculate_total()
         self.customer.add_order(self)
         return True
+
 
 # Демонстрация работы
 
