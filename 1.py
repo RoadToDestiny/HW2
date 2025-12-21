@@ -1,263 +1,274 @@
-from abc import ABC, abstractmethod
-
-
-class Employee(ABC):
+class Employee:
     """
-    Абстрактный базовый класс для всех сотрудников компании.
-
+    Класс для представления сотрудника в компании.
+    
     Attributes:
+        employee_id (int): Уникальный идентификатор сотрудника
         name (str): Имя сотрудника
         base_salary (float): Базовая зарплата сотрудника
+        department (str): Отдел, в котором работает сотрудник
     """
-
-    def __init__(self, name: str, base_salary: float) -> None:
+    
+    def __init__(self, employee_id, name, base_salary, department):
         """
-        Конструктор базового класса Employee.
-
+        Инициализирует объект сотрудника.
+        
         Args:
+            employee_id (int): Уникальный идентификатор сотрудника
             name (str): Имя сотрудника
             base_salary (float): Базовая зарплата сотрудника
-
-        Raises:
-            ValueError: Если имя пустое или зарплата отрицательная
+            department (str): Отдел, в котором работает сотрудник
         """
-        if not name or not name.strip():
-            raise ValueError("Имя сотрудника не может быть пустым")
-        if base_salary < 0:
-            raise ValueError("Зарплата не может быть отрицательной")
+        self.employee_id = employee_id
+        self.name = name
+        self.base_salary = base_salary
+        self.department = department
+
+    def calculate_salary(self):
+        """
+        Рассчитывает зарплату сотрудника.
         
-        self._name = name.strip()
-        self._base_salary = base_salary
-
-    @property
-    def name(self) -> str:
-        """
-        Возвращает имя сотрудника.
-
         Returns:
-            str: Имя сотрудника
+            float: Зарплата сотрудника
         """
-        return self._name
+        return self.base_salary
 
-    @property
-    def base_salary(self) -> float:
+    def get_info(self):
         """
-        Возвращает базовую зарплату сотрудника.
-
+        Возвращает информацию о сотруднике.
+        
         Returns:
-            float: Базовая зарплата
+            str: Строка с информацией о сотруднике
         """
-        return self._base_salary
-
-    @abstractmethod
-    def calculate_salary(self) -> float:
-        """
-        Абстрактный метод для расчета зарплаты.
-        Должен быть реализован в каждом дочернем классе.
-
-        Returns:
-            float: Общая зарплата сотрудника
-        """
-        pass
-
-    def __str__(self) -> str:
-        """
-        Возвращает строковое представление сотрудника.
-
-        Returns:
-            str: Информация о сотруднике
-        """
-        return f"Сотрудник: {self._name}, Базовая зарплата: {self._base_salary} руб."
+        return f"ID: {self.employee_id}, {self.name}, Отдел: {self.department}"
 
 
 class Manager(Employee):
     """
-    Класс менеджера, наследуется от Employee.
-
+    Класс для представления менеджера в компании.
+    
     Attributes:
-        bonus (float): Бонус менеджера
+        employee_id (int): Уникальный идентификатор сотрудника
+        name (str): Имя сотрудника
+        base_salary (float): Базовая зарплата сотрудника
+        department (str): Отдел, в котором работает сотрудник
+        bonus_percent (float): Процент бонуса от базовой зарплаты
+        team_size (int): Размер команды под руководством менеджера
     """
-
-    def __init__(self, name: str, base_salary: float, bonus: float) -> None:
+    
+    def __init__(self, employee_id, name, base_salary, department, bonus_percent, team_size):
         """
-        Конструктор класса Manager.
-
+        Инициализирует объект менеджера.
+        
         Args:
-            name (str): Имя менеджера
-            base_salary (float): Базовая зарплата
-            bonus (float): Бонус менеджера
-
-        Raises:
-            ValueError: Если бонус отрицательный
+            employee_id (int): Уникальный идентификатор сотрудника
+            name (str): Имя сотрудника
+            base_salary (float): Базовая зарплата сотрудника
+            department (str): Отдел, в котором работает сотрудник
+            bonus_percent (float): Процент бонуса от базовой зарплаты
+            team_size (int): Размер команды под руководством менеджера
         """
-        super().__init__(name, base_salary)
-        if bonus < 0:
-            raise ValueError("Бонус не может быть отрицательным")
-        self._bonus = bonus
+        super().__init__(employee_id, name, base_salary, department)
+        self.bonus_percent = bonus_percent
+        self.team_size = team_size
 
-    @property
-    def bonus(self) -> float:
+    def calculate_salary(self):
         """
-        Возвращает бонус менеджера.
-
+        Рассчитывает зарплату менеджера с учетом бонуса.
+        
         Returns:
-            float: Размер бонуса
+            float: Зарплата менеджера
         """
-        return self._bonus
+        bonus = self.base_salary * (self.bonus_percent / 100)
+        return self.base_salary + bonus
 
-    def calculate_salary(self) -> float:
+    def get_info(self):
         """
-        Расчет зарплаты менеджера с учетом бонуса.
-
+        Возвращает информацию о менеджере.
+        
         Returns:
-            float: Общая зарплата (базовая + бонус)
+            str: Строка с информацией о менеджере
         """
-        return self._base_salary + self._bonus
-
-    def __str__(self) -> str:
-        """
-        Возвращает строковое представление менеджера.
-
-        Returns:
-            str: Информация о менеджере
-        """
-        return f"Менеджер: {self._name}, Зарплата: {self.calculate_salary()} руб. (базовая: {self._base_salary}, бонус: {self._bonus})"
+        base_info = super().get_info()
+        return f"{base_info}, Должность: Менеджер, Команда: {self.team_size} чел."
 
 
 class Developer(Employee):
     """
-    Класс разработчика, наследуется от Employee.
-
-    Attributes:
-        overtime_hours (float): Количество сверхурочных часов
-        hourly_rate (float): Ставка за сверхурочный час
-    """
-
-    def __init__(self, name: str, base_salary: float, 
-                 overtime_hours: float, hourly_rate: float) -> None:
-        """
-        Конструктор класса Developer.
-
-        Args:
-            name (str): Имя разработчика
-            base_salary (float): Базовая зарплата
-            overtime_hours (float): Сверхурочные часы
-            hourly_rate (float): Ставка за час сверхурочной работы
-
-        Raises:
-            ValueError: Если сверхурочные часы или ставка отрицательные
-        """
-        super().__init__(name, base_salary)
-        if overtime_hours < 0:
-            raise ValueError("Сверхурочные часы не могут быть отрицательными")
-        if hourly_rate < 0:
-            raise ValueError("Ставка за час не может быть отрицательной")
-        
-        self._overtime_hours = overtime_hours
-        self._hourly_rate = hourly_rate
-
-    @property
-    def overtime_hours(self) -> float:
-        """
-        Возвращает количество сверхурочных часов.
-
-        Returns:
-            float: Количество часов
-        """
-        return self._overtime_hours
-
-    @property
-    def hourly_rate(self) -> float:
-        """
-        Возвращает ставку за сверхурочный час.
-
-        Returns:
-            float: Ставка за час
-        """
-        return self._hourly_rate
-
-    def calculate_salary(self) -> float:
-        """
-        Расчет зарплаты разработчика с учетом сверхурочных.
-
-        Returns:
-            float: Общая зарплата (базовая + оплата сверхурочных)
-        """
-        return self._base_salary + (self._overtime_hours * self._hourly_rate)
-
-    def __str__(self) -> str:
-        """
-        Возвращает строковое представление разработчика.
-
-        Returns:
-            str: Информация о разработчике
-        """
-        overtime_pay = self._overtime_hours * self._hourly_rate
-        return f"Разработчик: {self._name}, Зарплата: {self.calculate_salary()} руб. (базовая: {self._base_salary}, сверхурочные: {overtime_pay})"
-
-
-def display_employee_info(employee: Employee) -> None:
-    """
-    Выводит информацию о сотруднике и его зарплате.
-
-    Args:
-        employee (Employee): Объект сотрудника
-    """
-    print(f"{employee}")
-    print(f"  Рассчитанная зарплата: {employee.calculate_salary():.2f} руб.")
-    print()
-
-
-def main() -> None:
-    """
-    Основная функция для демонстрации работы классов сотрудников.
-    """
-    print("=" * 60)
-    print("ДЕМОНСТРАЦИЯ РАБОТЫ СИСТЕМЫ УПРАВЛЕНИЯ СОТРУДНИКАМИ")
-    print("=" * 60)
+    Класс для представления разработчика в компании.
     
-    try:
-        # Создаем сотрудников
-        manager = Manager("Иван Иванов", 50000, 15000)
-        developer = Developer("Пётр Петров", 40000, 10, 500)
+    Attributes:
+        employee_id (int): Уникальный идентификатор сотрудника
+        name (str): Имя сотрудника
+        base_salary (float): Базовая зарплата сотрудника
+        department (str): Отдел, в котором работает сотрудник
+        programming_language (str): Основной язык программирования
+        experience_years (int): Опыт работы в годах
+        overtime_hours (int): Количество сверхурочных часов в месяц
+        overtime_rate (float): Ставка оплаты сверхурочных часов
+    """
+    
+    def __init__(self, employee_id, name, base_salary, department, 
+                 programming_language, experience_years, overtime_hours, overtime_rate):
+        """
+        Инициализирует объект разработчика.
         
-        # Выводим информацию о сотрудниках
-        display_employee_info(manager)
-        display_employee_info(developer)
+        Args:
+            employee_id (int): Уникальный идентификатор сотрудника
+            name (str): Имя сотрудника
+            base_salary (float): Базовая зарплата сотрудника
+            department (str): Отдел, в котором работает сотрудник
+            programming_language (str): Основной язык программирования
+            experience_years (int): Опыт работы в годах
+            overtime_hours (int): Количество сверхурочных часов в месяц
+            overtime_rate (float): Ставка оплаты сверхурочных часов
+        """
+        super().__init__(employee_id, name, base_salary, department)
+        self.programming_language = programming_language
+        self.experience_years = experience_years
+        self.overtime_hours = overtime_hours
+        self.overtime_rate = overtime_rate
+
+    def calculate_salary(self):
+        """
+        Рассчитывает зарплату разработчика с учетом сверхурочных.
         
-        # Дополнительные примеры
-        print("-" * 60)
-        print("ДОПОЛНИТЕЛЬНЫЕ ПРИМЕРЫ:")
-        print("-" * 60)
+        Returns:
+            float: Зарплата разработчика
+        """
+        overtime_payment = self.overtime_hours * self.overtime_rate
+        return self.base_salary + overtime_payment
+
+    def get_info(self):
+        """
+        Возвращает информацию о разработчике.
         
-        senior_manager = Manager("Анна Сидорова", 80000, 30000)
-        senior_developer = Developer("Мария Козлова", 60000, 5, 1000)
+        Returns:
+            str: Строка с информацией о разработчике
+        """
+        base_info = super().get_info()
+        return f"{base_info}, Должность: Разработчик, Язык: {self.programming_language}, Опыт: {self.experience_years} лет"
+
+
+class Company:
+    """
+    Класс для представления компании и управления сотрудниками.
+    
+    Attributes:
+        name (str): Название компании
+        employees (list): Список сотрудников компании
+    """
+    
+    def __init__(self, name):
+        """
+        Инициализирует объект компании.
         
-        display_employee_info(senior_manager)
-        display_employee_info(senior_developer)
+        Args:
+            name (str): Название компании
+        """
+        self.name = name
+        self.employees = []
+
+    def add_employee(self, employee):
+        """
+        Добавляет сотрудника в компанию.
         
-        # Демонстрация обработки ошибок
-        print("-" * 60)
-        print("ПРОВЕРКА ВАЛИДАЦИИ ДАННЫХ:")
-        print("-" * 60)
+        Args:
+            employee (Employee): Объект сотрудника для добавления
+        """
+        self.employees.append(employee)
+
+    def remove_employee(self, employee_id):
+        """
+        Удаляет сотрудника из компании.
         
-        try:
-            invalid_employee = Manager("", 50000, 10000)
-        except ValueError as e:
-            print(f"Ошибка при создании сотрудника: {e}")
+        Args:
+            employee_id (int): Идентификатор сотрудника для удаления
+        """
+        self.employees = [e for e in self.employees if e.employee_id != employee_id]
+
+    def calculate_total_payroll(self):
+        """
+        Рассчитывает общий фонд заработной платы компании.
         
-        try:
-            invalid_salary = Developer("Тест", -10000, 10, 500)
-        except ValueError as e:
-            print(f"Ошибка при создании сотрудника: {e}")
+        Returns:
+            float: Общая сумма зарплат всех сотрудников
+        """
+        total = 0
+        for employee in self.employees:
+            total += employee.calculate_salary()
+        return total
+
+    def get_employees_by_department(self, department):
+        """
+        Возвращает список сотрудников указанного отдела.
+        
+        Args:
+            department (str): Название отдела
             
-        print("=" * 60)
-        print("ДЕМОНСТРАЦИЯ ЗАВЕРШЕНА")
-        print("=" * 60)
-        
-    except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        Returns:
+            list: Список сотрудников отдела
+        """
+        return [e for e in self.employees if e.department == department]
+
+    def print_all_employees(self):
+        """
+        Выводит информацию обо всех сотрудниках компании.
+        """
+        print(f"=== Сотрудники компании '{self.name}' ===")
+        for employee in self.employees:
+            salary = employee.calculate_salary()
+            print(f"{employee.get_info()}, Зарплата: {salary:.2f} руб.")
+        print(f"Всего сотрудников: {len(self.employees)}")
+        print(f"Общий фонд зарплат: {self.calculate_total_payroll():.2f} руб.")
+        print()
 
 
-if __name__ == "__main__":
-    main()
+# Демонстрация работы
+
+# Создание компании
+company = Company("ТехноПрогресс")
+
+# Создание менеджеров
+manager1 = Manager(1, "Иван Иванов", 80000, "Управление", 20, 5)
+manager2 = Manager(2, "Анна Сидорова", 90000, "Разработка", 25, 8)
+
+# Создание разработчиков
+developer1 = Developer(3, "Петр Петров", 70000, "Разработка", 
+                       "Python", 3, 10, 1000)
+developer2 = Developer(4, "Мария Козлова", 75000, "Разработка", 
+                       "JavaScript", 5, 5, 1200)
+developer3 = Developer(5, "Алексей Смирнов", 65000, "Тестирование", 
+                       "Java", 2, 8, 800)
+
+# Добавление сотрудников в компанию
+company.add_employee(manager1)
+company.add_employee(manager2)
+company.add_employee(developer1)
+company.add_employee(developer2)
+company.add_employee(developer3)
+
+# Вывод информации о сотрудниках
+company.print_all_employees()
+
+# Расчет зарплат отдельных сотрудников
+print("=== Расчет зарплат ===")
+print(f"Зарплата менеджера {manager1.name}: {manager1.calculate_salary():.2f} руб.")
+print(f"Зарплата разработчика {developer1.name}: {developer1.calculate_salary():.2f} руб.")
+print()
+
+# Получение сотрудников по отделам
+print("=== Сотрудники отдела Разработка ===")
+dev_department = company.get_employees_by_department("Разработка")
+for emp in dev_department:
+    print(f"- {emp.name}: {emp.calculate_salary():.2f} руб.")
+
+# Добавление нового сотрудника
+print("\n=== Добавление нового сотрудника ===")
+new_developer = Developer(6, "Ольга Новикова", 68000, "Разработка", 
+                          "Python", 4, 7, 1100)
+company.add_employee(new_developer)
+print(f"Добавлен новый сотрудник: {new_developer.name}")
+
+# Обновленная информация
+company.print_all_employees()
