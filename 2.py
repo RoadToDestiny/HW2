@@ -1,73 +1,100 @@
-class Vehicle:
+class Employee:
     """
-    Базовый класс для всех транспортных средств.
-    
-    Этот класс представляет общее понятие транспортного средства
-    и содержит базовую реализацию метода описания.
+    Базовый класс для всех сотрудников компании.
+
+    Attributes:
+        name (str): Имя сотрудника
+        salary (float): Базовая зарплата сотрудника
     """
-     
-    def get_description(self):
+
+    def __init__(self, name: str, salary: float):
         """
-        Возвращает описание транспортного средства.
-        
+        Конструктор базового класса Employee.
+
+        Args:
+            name (str): Имя сотрудника
+            salary (float): Базовая зарплата
+        """
+        self.name = name
+        self.salary = salary
+
+    def calculate_salary(self) -> float:
+        """
+        Расчет зарплаты сотрудника.
+
         Returns:
-            str: Строка с описанием транспортного средства
+            float: Базовая зарплата сотрудника
         """
-        return "Это транспортное средство"
+        return self.salary
 
-class Car(Vehicle):
+
+class Manager(Employee):
     """
-    Класс, представляющий автомобиль.
-    
-    Наследуется от класса Vehicle и описывает
-    специфические характеристики автомобиля.
+    Класс менеджера, наследуется от Employee.
+
+    Attributes:
+        bonus (float): Бонус менеджера
     """
 
-    def get_description(self):
+    def __init__(self, name: str, salary: float, bonus: float):
         """
-        Возвращает описание автомобиля.
-        
+        Конструктор класса Manager.
+
+        Args:
+            name (str): Имя менеджера
+            salary (float): Базовая зарплата
+            bonus (float): Бонус менеджера
+        """
+        super().__init__(name, salary)
+        self.bonus = bonus
+
+    def calculate_salary(self) -> float:
+        """
+        Расчет зарплаты менеджера с учетом бонуса.
+
         Returns:
-            str: Строка с описанием автомобиля
+            float: Общая зарплата (базовая + бонус)
         """
-        return "Это автомобиль - легковое транспортное средство"
-    
-class Bicycle(Vehicle):
+        return self.salary + self.bonus
+
+
+class Developer(Employee):
     """
-    Класс, представляющий велосипед.
-    
-    Наследуется от класса Vehicle и описывает
-    специфические характеристики велосипеда.
+    Класс разработчика, наследуется от Employee.
+
+    Attributes:
+        overtime_hours (float): Количество сверхурочных часов
+        hourly_rate (float): Ставка за сверхурочный час
     """
 
-    def get_description(self):
+    def __init__(self, name: str, salary: float, overtime_hours: float, hourly_rate: float):
         """
-        Возвращает описание велосипеда.
-    
+        Конструктор класса Developer.
+
+        Args:
+            name (str): Имя разработчика
+            salary (float): Базовая зарплата
+            overtime_hours (float): Сверхурочные часы
+            hourly_rate (float): Ставка за час сверхурочной работы
+        """
+        super().__init__(name, salary)
+        self.overtime_hours = overtime_hours
+        self.hourly_rate = hourly_rate
+
+    def calculate_salary(self) -> float:
+        """
+        Расчет зарплаты разработчика с учетом сверхурочных.
+
         Returns:
-            str: Строка с описанием велосипеда
+            float: Общая зарплата (базовая + оплата сверхурочных)
         """
-        return "Это велосипед - транспортное средство с педалями"
-        
-class Motorcycle(Vehicle):
-    """
-    Класс, представляющий мотоцикл.
-    
-    Наследуется от класса Vehicle и описывает
-    специфические характеристики мотоцикла.
-    """
+        return self.salary + (self.overtime_hours * self.hourly_rate)
 
-    def get_description(self):
-        """
-        Возвращает описание мотоцикла.
-    
-        Returns:
-            str: Строка с описанием мотоцикла
-        """
-        return "Это мотоцикл - двухколесное транспортное средство с двигателем"
-        
-# Демонстрация работы метода для каждого транспортного средства
-vehicles = [Vehicle(), Car(), Bicycle(), Motorcycle()]
 
-for vehicle in vehicles:
-    print(vehicle.get_description())
+# Пример использования
+if __name__ == "__main__":
+    manager = Manager("Иван Иванов", 50000, 15000)
+    developer = Developer("Петр Петров", 40000, 10, 500)
+
+    print(f"Зарплата менеджера: {manager.calculate_salary()} руб.")
+    print(f"Зарплата разработчика: {developer.calculate_salary()} руб.")
